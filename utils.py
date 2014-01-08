@@ -31,6 +31,11 @@ def mkdir(dir_name):
     """mkdir: make a dir on a machine"""
     fab.api.run("mkdir "+ dir_name)
 
+def rmdir(dir_name):
+    """mkdir: make a dir on a machine"""
+    fab.api.run("rm -rf "+ dir_name)
+
+
 def copy_to_hosts(remote_path = None, local_path = None):
     """copy_to_hosts: copy some file to the remote machine"""
     fab.operations.put( local_path, remote_path)
