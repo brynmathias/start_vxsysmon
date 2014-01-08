@@ -7,6 +7,7 @@ from fabric.api import execute
 def main():
     """docstring for main"""
     settings = ut.options()
+
     execute(ut.stop_sysmon, hosts = settings.hosts)
 
 if __name__ == '__main__':

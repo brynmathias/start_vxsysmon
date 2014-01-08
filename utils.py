@@ -56,12 +56,12 @@ def make_run_script(settings = None):
     script = script.read()
     script = script.replace('TEST_TMP', settings.test_name)
     if settings.runtime is not None:
-        script = script.replace('TESTTIME', "sleep({time})".format(time =
+        script = script.replace('TESTTIME', "sleep {time}".format(time =
             settings.runtime*3600))
         script = script.replace('TESTEND', "killall vxsysmon")
     else:
-        script = script.replace('TESTTIME',  "")
-        script = script.replace('TESTEND', "")
+        script = script.replace('TESTTIME', "")
+        script = script.replace('TESTEND',  "")
 
     out_file = open("./start_sysmon.sh",'w')
     out_file.write(script)
