@@ -29,8 +29,6 @@ def options():
     return parser.parse_args()
 
 
-
-
 def mkdir(dir_name = None):
     """mkdir: make a dir on a machine"""
     fab.api.run("mkdir "+ dir_name)
@@ -39,11 +37,32 @@ def rmdir(dir_name = None):
     """rmdir: remove a dir on a machine"""
     fab.api.run("rm -rf "+ dir_name)
 
-def start_sysmon(vx_sysmon = None):
+def start_sysmon(vx_sysmon_path = None):
     """start_sysmon starts the sysmon process"""
-    fab.api.sudo("chmod +x " + vx_sysmon)
-    fab.api.run("nohup " + vx_sysmon + " &")
+    with fab.api.cd(vx_sysmon_path):
+        fab.api.sudo("chmod +x ./vxsysmon")
+        fab.api.sudo("chmod +x ./start_sysmon.sh")
+        fab.api.run("nohup ./start_sysmon.sh")
 
 def stop_sysmon():
     """stop_sysmon"""
     fab.api.run("killall vxsysmon")
+
+
+def make_run_script(settings = None):
+    """make_run_script make a script that runs the vxsysmon,
+    sleeps if necessary"""
+    script = open("./start_sysmon_tmp.sh",'r')
+    script = script.read()
+    script = script.replace('TEST_TMP', settings.test_name)
+    if settings.runtime is not None:
+        script = script.replace('TESTTIME', "sleep({time})".format(time =
+            settings.runtime*3600))
+        script = script.replace('TESTEND', "killall vxsysmon")
+    else:
+        script = script.replace('TESTTIME',  "")
+        script = script.replace('TESTEND', "")
+
+    out_file = open("./start_sysmon.sh",'w')
+    out_file.write(script)
+    out_file.close()
