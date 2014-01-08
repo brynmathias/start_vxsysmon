@@ -12,6 +12,8 @@ def main():
     execute(ut.mkdir, settings.test_name, hosts = settings.hosts)
     execute(put, VXSYSMON_PATH, "./"+settings.test_name+"/"+VXSYSMON_PATH,
             hosts=settings.hosts)
+    execute(ut.start_sysmon, "./"+settings.test_name+"/"+VXSYSMON_PATH, hosts =
+            settings.hosts)
     print settings
 
 if __name__ == '__main__':

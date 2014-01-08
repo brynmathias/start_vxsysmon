@@ -27,14 +27,23 @@ def options():
             "runtime", help = "Amount of time we want to run for in hours")
 
     return parser.parse_args()
-def mkdir(dir_name):
+def mkdir(dir_name = None):
     """mkdir: make a dir on a machine"""
     fab.api.run("mkdir "+ dir_name)
 
-def rmdir(dir_name):
-    """mkdir: make a dir on a machine"""
+def rmdir(dir_name = None):
+    """rmdir: remove a dir on a machine"""
     fab.api.run("rm -rf "+ dir_name)
 
+
+def start_sysmon(vx_sysmon = None):
+    """start_sysmon starts the sysmon process"""
+    fab.api.sudo("chmod +x " + vx_sysmon)
+    fab.api.run("nohup " + vx_sysmon + " &")
+
+def stop_sysmon():
+    """stop_sysmon"""
+    fab.api.run("killall vxsysmon")
 
 def copy_to_hosts(remote_path = None, local_path = None):
     """copy_to_hosts: copy some file to the remote machine"""
