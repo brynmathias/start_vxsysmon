@@ -55,7 +55,7 @@ def start_sysmon(vx_sysmon_path = None):
         fab.api.sudo("chmod +x ./start_sysmon.sh")
     fab.api.env.always_use_pty = False
     with fab.api.cd(vx_sysmon_path):
-        fab.api.run("nohup ./vxsysmon >& /dev/null < /dev/null &", pty = True)
+        fab.api.run("nohup ./start_sysmon.sh >& /dev/null < /dev/null &", pty = True)
 
 def stop_sysmon():
     """stop_sysmon"""
