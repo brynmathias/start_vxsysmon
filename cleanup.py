@@ -4,11 +4,14 @@ maybe not'''
 
 import utils as ut
 from fabric.api import execute
-from fabric.operations import put
-
+import fabric
 def main():
     """docstring for main"""
     settings = ut.options()
+    fabric.api.env.warn_only = True
+    for h in settings.hosts:
+        execute(ut.get_sysmon_logs, settings = settings, hostname = h, hosts
+            = [h])
     execute(ut.rmdir, settings.test_name, hosts = settings.hosts)
 
 if __name__ == '__main__':

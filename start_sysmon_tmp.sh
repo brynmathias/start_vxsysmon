@@ -1,5 +1,4 @@
-#! /bin/sh
-
-nohup ./vxsysmon &
+#! /usr/bin/env bash
+./vxsysmon &
 TESTTIME
 TESTEND

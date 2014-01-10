@@ -5,8 +5,8 @@ grab the results and plot them locally'''
 import fabric as fab
 import datetime as dt
 import argparse as ap
-
-
+import glob
+from os.path import expanduser
 
 
 
@@ -25,9 +25,18 @@ def options():
 
     parser.add_argument("--runtime", "-t", type = int, default = None, dest =
             "runtime", help = "Amount of time we want to run for in hours")
-
+    fab.api.env.always_use_pty = False
+    fab.api.env.warn_only = True
     return parser.parse_args()
 
+def get_sysmon_logs(settings = None, hostname = None):
+    """get_sysmon_logs: get the logs from the remote machines, put them in
+    subfolders of the host name, inside a folder with the test name"""
+    local_dir = "{home}/perf_test_results/{test}".format(home =
+        expanduser("~"), test = settings.test_name)
+    fab.api.local("mkdir -p "+local_dir)
+    fab.operations.get(settings.test_name, "{local}/{host}/".format(
+        local = local_dir, host = hostname))
 
 def mkdir(dir_name = None):
     """mkdir: make a dir on a machine"""
@@ -35,14 +44,18 @@ def mkdir(dir_name = None):
 
 def rmdir(dir_name = None):
     """rmdir: remove a dir on a machine"""
+    fab.api.env.warn_only = True
     fab.api.run("rm -rf "+ dir_name)
 
 def start_sysmon(vx_sysmon_path = None):
     """start_sysmon starts the sysmon process"""
+    fab.api.env.always_use_pty = True
     with fab.api.cd(vx_sysmon_path):
         fab.api.sudo("chmod +x ./vxsysmon")
         fab.api.sudo("chmod +x ./start_sysmon.sh")
-        fab.api.run("nohup ./start_sysmon.sh")
+    fab.api.env.always_use_pty = False
+    with fab.api.cd(vx_sysmon_path):
+        fab.api.run("nohup ./vxsysmon >& /dev/null < /dev/null &", pty = True)
 
 def stop_sysmon():
     """stop_sysmon"""

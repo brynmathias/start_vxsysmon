@@ -19,9 +19,7 @@ def main():
 
     execute(put, "./start_sysmon.sh", "./"+settings.test_name+"/start_sysmon.sh"
             , hosts = settings.hosts)
-
-    execute(ut.start_sysmon, settings.test_name,
-            hosts = settings.hosts)
+    execute(ut.start_sysmon, settings.test_name, hosts = settings.hosts)
 
     print settings
 
