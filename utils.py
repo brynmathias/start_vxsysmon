@@ -28,12 +28,12 @@ def options():
     fab.api.env.warn_only = True
     return parser.parse_args()
 
+
 def get_sysmon_logs(settings = None, hostname = None):
     """get_sysmon_logs: get the logs from the remote machines, put them in
     subfolders of the host name, inside a folder with the test name"""
     if "@" in hostname:
         hostname = hostname.split("@")[1]
-
     local_dir = "{home}/perf_test_results/{test}/{host}".format(home =
         expanduser("~"), test = settings.test_name, host = hostname)
 
